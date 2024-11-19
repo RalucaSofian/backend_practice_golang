@@ -1,0 +1,15 @@
+services:
+  local_db_go:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=pets-go
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_go:/var/lib/postgresql/data
+    restart: unless-stopped
+volumes:
+  db_go:
+    driver: local
