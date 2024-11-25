@@ -9,9 +9,6 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// TODO: env var / constants
-var secretKey = []byte("SECRET_KEY")
-
 // Create an Access Token, based on some User Data
 func CreateAccessToken(dataToEncode any) (string, error) {
 	tokenClaims := jwt.MapClaims{
@@ -21,7 +18,7 @@ func CreateAccessToken(dataToEncode any) (string, error) {
 
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, tokenClaims)
 
-	tokenString, err := accessToken.SignedString(secretKey)
+	tokenString, err := accessToken.SignedString([]byte(utils.SECRET_KEY))
 	if err != nil {
 		fmt.Println("[utils]", err.Error())
 		apiErr := utils.NewApiError(utils.ErrorType_JWTError, err.Error())
@@ -33,7 +30,7 @@ func CreateAccessToken(dataToEncode any) (string, error) {
 // Validate an Access Token
 func ValidAccessToken(tokenString string) bool {
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-		return secretKey, nil
+		return []byte(utils.SECRET_KEY), nil
 	})
 	if err != nil {
 		fmt.Println("[utils]", err.Error())
@@ -49,7 +46,7 @@ func ValidAccessToken(tokenString string) bool {
 // Extract the Auth User Email from an Access Token
 func ExtractEmailFromToken(authToken string) (string, error) {
 	token, err := jwt.Parse(authToken, func(t *jwt.Token) (interface{}, error) {
-		return secretKey, nil
+		return []byte(utils.SECRET_KEY), nil
 	})
 	if err != nil {
 		fmt.Println("[utils]", err.Error())

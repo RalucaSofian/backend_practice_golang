@@ -1,6 +1,7 @@
 package db
 
 import (
+	"app/utils"
 	"database/sql"
 	"fmt"
 
@@ -23,8 +24,12 @@ func GetConn() *bun.DB {
 }
 
 func connect() error {
-	// TODO: Env vars
-	dbURL := "postgres://postgres:pass@localhost:5432/pets-go"
+
+	dbURL := fmt.Sprintf(
+		"postgres://%s:%s@%s:%d/%s",
+		utils.DB_USER, utils.DB_PASSWORD, utils.DB_HOST, utils.DB_PORT, utils.DB_NAME,
+	)
+
 	sqlDb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dbURL), pgdriver.WithInsecure(true)))
 
 	dbConn := bun.NewDB(sqlDb, pgdialect.New())

@@ -23,7 +23,7 @@ type AuthUser struct {
 	Address      *string  `bun:"address"`
 	Phone        *string  `bun:"phone"`
 	Role         UserRole `bun:"role,notnull"`
-	SearchVector string   `bun:"search_vector,notnull"`
+	SearchVector string   `bun:"search_vector,notnull,scanonly"`
 }
 
 func (user AuthUser) IsModel() {}

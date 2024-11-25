@@ -11,7 +11,6 @@ type Model interface {
 }
 
 func Update[T Model](object T, input map[string]interface{}) (T, error) {
-
 	// pass object by reference
 	objVal := reflect.ValueOf(&object).Elem()
 
@@ -34,8 +33,9 @@ func Update[T Model](object T, input map[string]interface{}) (T, error) {
 					objField.Set(reflect.ValueOf(&typedVal))
 
 				case float32, float64:
-					typedVal, _ := val.(float64)
-					objField.Set(reflect.ValueOf(&typedVal))
+					f64, _ := val.(float64)
+					f32 := float32(f64)
+					objField.Set(reflect.ValueOf(&f32))
 
 				case bool:
 					typedVal, _ := val.(bool)

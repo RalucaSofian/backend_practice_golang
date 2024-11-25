@@ -36,6 +36,7 @@ func RegisterUser(registerInput types.RegisterInputDTO) (*types.AuthUserDTO, err
 		return nil, err
 	}
 	dbUser.Password = hashedPassword
+	dbUser.Role = models.UserRole_User
 
 	_, err = db.GetConn().NewInsert().Model(&dbUser).Exec(context.Background())
 	if err != nil {
@@ -168,7 +169,6 @@ func UpdateUser(userId int, updateInput map[string]interface{}) (*types.AuthUser
 
 	_, err = db.GetConn().NewUpdate().
 		Model(&dbUser).
-		ExcludeColumn("search_vector").
 		WherePK().
 		Exec(context.Background())
 	if err != nil {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"app/controllers"
+	"app/utils"
 	"app/utils/middlewares"
 	"fmt"
 	"net/http"
@@ -10,9 +11,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
-
-// TODO: Env variable
-const serverPort = ":3000"
 
 func main() {
 	if len(os.Args) > 1 {
@@ -45,8 +43,25 @@ func main() {
 		rtr.Delete("/users/{user_id}", controllers.DeleteUserHandler)
 	})
 
-	fmt.Println("[server] API Server Running on Port", serverPort)
-	http.ListenAndServe(serverPort, router)
+	// --- PETS ---
+	// Routes that need authentication
+	router.Group(func(pRtr chi.Router) {
+		pRtr.Use(middlewares.AuthMiddleware)
+		// Create a Pet
+		pRtr.Post("/pets", controllers.CreatePetHandler)
+		// Get a Pet
+		pRtr.Get("/pets/{pet_id}", controllers.GetPetByIdHandler)
+		// Get all Pets (+ Query)
+		pRtr.Get("/pets", controllers.GetAllPetsHandler)
+		// Patch a Pet
+		pRtr.Patch("/pets/{pet_id}", controllers.UpdatePetHandler)
+		// Delete a Pet
+		pRtr.Delete("/pets/{pet_id}", controllers.DeletePetHandler)
+	})
+
+	fmt.Println("[server] API Server Running on Port", utils.SERVER_PORT)
+	serverAddr := fmt.Sprintf("0.0.0.0:%d", utils.SERVER_PORT)
+	http.ListenAndServe(serverAddr, router)
 
 	fmt.Println("[server] API Server Exiting")
 }

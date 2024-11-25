@@ -6,14 +6,17 @@ import "fmt"
 type ErrorType string
 
 const (
-	ErrorType_TokenExpired      ErrorType = "TokenExpired"
-	ErrorType_JWTError          ErrorType = "JWTError"
-	ErrorType_QueryError        ErrorType = "QueryError"
-	ErrorType_FormatError       ErrorType = "FormatError"
-	ErrorType_UpdateError       ErrorType = "UpdateError"
+	ErrorType_TokenExpired ErrorType = "TokenExpired"
+	ErrorType_JWTError     ErrorType = "JWTError"
+	ErrorType_QueryError   ErrorType = "QueryError"
+	ErrorType_FormatError  ErrorType = "FormatError"
+	ErrorType_UpdateError  ErrorType = "UpdateError"
+
 	ErrorType_UserAlreadyExists ErrorType = "UserAlreadyExists"
 	ErrorType_UserDoesNotExist  ErrorType = "UserDoesNotExist"
 	ErrorType_UserLoginFailed   ErrorType = "UserLoginFailed"
+
+	ErrorType_PetDoesNotExist ErrorType = "PetDoesNotExist"
 )
 
 type ApiError struct {

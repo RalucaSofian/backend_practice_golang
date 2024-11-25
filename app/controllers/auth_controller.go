@@ -100,6 +100,7 @@ func GetAllUsersHandler(respWr http.ResponseWriter, req *http.Request) {
 	currentUser, crtUserErr := middlewares.GetCurrentUser(req)
 	if utils.IsErrorOfType(crtUserErr, utils.ErrorType_FormatError) {
 		utils.SendErrorResponse(respWr, 400, "Get Failed")
+		return
 	}
 
 	fmt.Println("[controller] Current User is:", currentUser.Role)
