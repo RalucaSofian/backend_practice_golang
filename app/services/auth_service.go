@@ -22,7 +22,7 @@ func RegisterUser(registerInput types.RegisterInputDTO) (*types.AuthUserDTO, err
 		Where("email = ?", dbUser.Email).
 		Exists(context.Background())
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 	if exists {
@@ -32,7 +32,7 @@ func RegisterUser(registerInput types.RegisterInputDTO) (*types.AuthUserDTO, err
 
 	hashedPassword, err := access_utils.GeneratePasswordHash(registerInput.Password)
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 	dbUser.Password = hashedPassword
@@ -40,10 +40,19 @@ func RegisterUser(registerInput types.RegisterInputDTO) (*types.AuthUserDTO, err
 
 	_, err = db.GetConn().NewInsert().Model(&dbUser).Exec(context.Background())
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 	userDTO := types.NewAuthUserDtoFromDbUser(dbUser)
+
+	// Also create a Client object for the Current User
+	newClientInput := types.CreateClientInputDTO{}
+	clientDescription := fmt.Sprintf("%s (%s)", *dbUser.Name, *dbUser.Phone)
+	newClientInput.UserId = &dbUser.Id
+	newClientInput.Description = &clientDescription
+
+	newClientResult, newClientErr := CreateClient(newClientInput)
+	fmt.Println("[service] Created Client object for the current Auth User. Result:", newClientResult, "Error:", newClientErr)
 
 	return &userDTO, nil
 }
@@ -62,7 +71,7 @@ func LoginUser(loginInput types.LoginInputDTO) (string, error) {
 		return "", utils.NewApiError(utils.ErrorType_UserLoginFailed, "Login Failed")
 	}
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return "", err
 	}
 
@@ -93,7 +102,7 @@ func GetUserById(userId int) (*types.AuthUserDTO, error) {
 		return nil, utils.NewApiError(utils.ErrorType_UserDoesNotExist, "Not Found")
 	}
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
@@ -114,7 +123,7 @@ func GetUserByEmail(email string) (*models.AuthUser, error) {
 		return nil, utils.NewApiError(utils.ErrorType_UserDoesNotExist, "Not Found")
 	}
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
@@ -131,7 +140,7 @@ func GetAllUsers(queryInfo *query_utils.QueryInfo) ([]*types.AuthUserDTO, error)
 	}
 	queryErr := query.Scan(context.Background())
 	if queryErr != nil {
-		fmt.Println("[service]", queryErr)
+		fmt.Println("[service]", queryErr.Error())
 		return nil, queryErr
 	}
 
@@ -157,13 +166,13 @@ func UpdateUser(userId int, updateInput map[string]interface{}) (*types.AuthUser
 		return nil, utils.NewApiError(utils.ErrorType_UserDoesNotExist, "Not Found")
 	}
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
 	dbUser, err = models.Update(dbUser, updateInput)
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
@@ -172,7 +181,7 @@ func UpdateUser(userId int, updateInput map[string]interface{}) (*types.AuthUser
 		WherePK().
 		Exec(context.Background())
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
@@ -192,7 +201,7 @@ func DeleteUser(userId int) (string, error) {
 		return "Delete Failed", utils.NewApiError(utils.ErrorType_UserDoesNotExist, "Not Found")
 	}
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return "Delete Failed", err
 	}
 
@@ -201,7 +210,7 @@ func DeleteUser(userId int) (string, error) {
 		Where("id = ?", userId).
 		Exec(context.Background())
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return "Delete Failed", err
 	}
 

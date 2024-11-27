@@ -29,7 +29,6 @@ func main() {
 	router.Post("/auth/register", controllers.RegisterHandler)
 	// Login as an User
 	router.Post("/auth/login", controllers.LoginHandler)
-
 	// Routes that need authentication
 	router.Group(func(rtr chi.Router) {
 		rtr.Use(middlewares.AuthMiddleware)
@@ -57,6 +56,22 @@ func main() {
 		pRtr.Patch("/pets/{pet_id}", controllers.UpdatePetHandler)
 		// Delete a Pet
 		pRtr.Delete("/pets/{pet_id}", controllers.DeletePetHandler)
+	})
+
+	// --- CLIENTS ---
+	// Routes that need authentication
+	router.Group(func(cRtr chi.Router) {
+		cRtr.Use(middlewares.AuthMiddleware)
+		// Create a Client
+		cRtr.Post("/clients", controllers.CreateClientHandler)
+		// Get a Client
+		cRtr.Get("/clients/{client_id}", controllers.GetClientByIdHandler)
+		// Get all Clients (+ Query)
+		cRtr.Get("/clients", controllers.GetAllClientsHandler)
+		// Patch a Client
+		cRtr.Patch("/clients/{client_id}", controllers.UpdateClientHandler)
+		// Delete a Client
+		cRtr.Delete("/clients/{client_id}", controllers.DeleteClientHandler)
 	})
 
 	fmt.Println("[server] API Server Running on Port", utils.SERVER_PORT)

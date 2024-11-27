@@ -12,8 +12,8 @@ type baseUser struct {
 
 // Auth User DTO
 type AuthUserDTO struct {
-	baseUser
 	Id int `json:"id"`
+	baseUser
 }
 
 // Register Input DTO
@@ -45,7 +45,6 @@ func NewAuthUserFromRegisterInput(registerInput RegisterInputDTO) models.AuthUse
 		Address:  registerInput.Address,
 		Phone:    registerInput.Phone,
 	}
-
 	return authUser
 }
 
@@ -61,7 +60,6 @@ func NewAuthUserDtoFromDbUser(dbUser models.AuthUser) AuthUserDTO {
 		},
 		Id: dbUser.Id,
 	}
-
 	return authUserDTO
 }
 
@@ -73,6 +71,5 @@ func NewAuthuserFromUpdateInput(updateInput UpdateUserInputDTO) models.AuthUser 
 		Address: updateInput.Address,
 		Phone:   updateInput.Phone,
 	}
-
 	return authUser
 }

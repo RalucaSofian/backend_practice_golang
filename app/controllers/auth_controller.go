@@ -68,12 +68,12 @@ func GetUserByIdHandler(respWr http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	// Access restrictions
 	currentUser, crtUserErr := middlewares.GetCurrentUser(req)
 	if utils.IsErrorOfType(crtUserErr, utils.ErrorType_FormatError) {
 		utils.SendErrorResponse(respWr, 400, "Get Failed")
 		return
 	}
-
 	fmt.Println("[controller] Current User is:", currentUser.Role)
 	if currentUser.Role != models.UserRole_Admin {
 		if currentUser.Id != idAsInt {
@@ -97,12 +97,12 @@ func GetUserByIdHandler(respWr http.ResponseWriter, req *http.Request) {
 
 // Get all Users (+ Query)
 func GetAllUsersHandler(respWr http.ResponseWriter, req *http.Request) {
+	// Access restrictions
 	currentUser, crtUserErr := middlewares.GetCurrentUser(req)
 	if utils.IsErrorOfType(crtUserErr, utils.ErrorType_FormatError) {
 		utils.SendErrorResponse(respWr, 400, "Get Failed")
 		return
 	}
-
 	fmt.Println("[controller] Current User is:", currentUser.Role)
 	if currentUser.Role != models.UserRole_Admin {
 		fmt.Println("[controller] Unauthorized request on Other Users")
@@ -140,12 +140,12 @@ func UpdateUserHandler(respWr http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	// Access restrictions
 	currentUser, crtUserErr := middlewares.GetCurrentUser(req)
 	if utils.IsErrorOfType(crtUserErr, utils.ErrorType_FormatError) {
 		utils.SendErrorResponse(respWr, 400, "Get Failed")
 		return
 	}
-
 	fmt.Println("[controller] Current User is:", currentUser.Role)
 	if currentUser.Role != models.UserRole_Admin {
 		if currentUser.Id != idAsInt {
@@ -185,12 +185,12 @@ func DeleteUserHandler(respWr http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	// Access restrictions
 	currentUser, crtUserErr := middlewares.GetCurrentUser(req)
 	if utils.IsErrorOfType(crtUserErr, utils.ErrorType_FormatError) {
 		utils.SendErrorResponse(respWr, 400, "Get Failed")
 		return
 	}
-
 	fmt.Println("[controller] Current User is:", currentUser.Role)
 	if currentUser.Role != models.UserRole_Admin {
 		if currentUser.Id != idAsInt {

@@ -63,7 +63,7 @@ func (queryInfo *QueryInfo) Process(baseQuery *bun.SelectQuery) *bun.SelectQuery
 	if queryInfo.Search != nil {
 		searchTerm := *queryInfo.Search
 		searchTerm = strings.ReplaceAll(searchTerm, " ", " & ")
-		query = query.Where("search_vector @@ to_tsquery('simple', ? || ':*')", searchTerm)
+		query = query.Where("?TableAlias.search_vector @@ to_tsquery('simple', ? || ':*')", searchTerm)
 	}
 
 	if queryInfo.Order != nil {

@@ -41,7 +41,7 @@ func NewPetFromCreatePetInput(createPetInput CreatePetInputDTO) models.Pet {
 	return pet
 }
 
-// New Pet DTO from Db Pet
+// New Pet DTO from DB Pet
 func NewPetDtoFromDbPet(dbPet models.Pet) PetDTO {
 	petDTO := PetDTO{
 		basePet: basePet{

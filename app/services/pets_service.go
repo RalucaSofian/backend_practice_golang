@@ -12,12 +12,13 @@ import (
 	"fmt"
 )
 
+// Create a new Pet
 func CreatePet(createPetInput types.CreatePetInputDTO) (*types.PetDTO, error) {
 	dbPet := types.NewPetFromCreatePetInput(createPetInput)
 
 	_, err := db.GetConn().NewInsert().Model(&dbPet).Exec(context.Background())
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
@@ -38,7 +39,7 @@ func GetPetById(petId int) (*types.PetDTO, error) {
 		return nil, utils.NewApiError(utils.ErrorType_PetDoesNotExist, "Not Found")
 	}
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
@@ -82,13 +83,13 @@ func UpdatePet(petId int, updateInput map[string]interface{}) (*types.PetDTO, er
 		return nil, utils.NewApiError(utils.ErrorType_PetDoesNotExist, "Not Found")
 	}
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
 	dbPet, err = models.Update(dbPet, updateInput)
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
@@ -97,7 +98,7 @@ func UpdatePet(petId int, updateInput map[string]interface{}) (*types.PetDTO, er
 		WherePK().
 		Exec(context.Background())
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return nil, err
 	}
 
@@ -117,7 +118,7 @@ func DeletePet(petID int) (string, error) {
 		return "Delete Failed", utils.NewApiError(utils.ErrorType_PetDoesNotExist, "Not Found")
 	}
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return "Delete Failed", err
 	}
 
@@ -126,7 +127,7 @@ func DeletePet(petID int) (string, error) {
 		Where("id = ?", petID).
 		Exec(context.Background())
 	if err != nil {
-		fmt.Println("[service]", err)
+		fmt.Println("[service]", err.Error())
 		return "Delete Failed", err
 	}
 

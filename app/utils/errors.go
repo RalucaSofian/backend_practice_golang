@@ -17,6 +17,8 @@ const (
 	ErrorType_UserLoginFailed   ErrorType = "UserLoginFailed"
 
 	ErrorType_PetDoesNotExist ErrorType = "PetDoesNotExist"
+
+	ErrorType_ClientDoesNotExist ErrorType = "ClientDoesNotExist"
 )
 
 type ApiError struct {
