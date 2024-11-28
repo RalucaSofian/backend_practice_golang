@@ -83,35 +83,35 @@ func (queryInfo *QueryInfo) Process(baseQuery *bun.SelectQuery) *bun.SelectQuery
 		for _, filter := range *queryInfo.Filters {
 			switch filter.Operation {
 			case FilterOp_EQ:
-				query = query.Where("? = ?", bun.Ident(filter.Field), filter.Value)
+				query = query.Where("?TableAlias.? = ?", bun.Ident(filter.Field), filter.Value)
 
 			case FilterOp_IS_NULL:
 				if filter.Value == true {
-					query = query.Where("? IS NULL", bun.Ident(filter.Field))
+					query = query.Where("?TableAlias.? IS NULL", bun.Ident(filter.Field))
 				} else if filter.Value == false {
-					query = query.Where("? IS NOT NULL", bun.Ident(filter.Field))
+					query = query.Where("?TableAlias.? IS NOT NULL", bun.Ident(filter.Field))
 				}
 
 			case FilterOp_IN:
-				query = query.Where("? IN (?)", bun.Ident(filter.Field), bun.In(filter.Value))
+				query = query.Where("?TableAlias.? IN (?)", bun.Ident(filter.Field), bun.In(filter.Value))
 
 			case FilterOp_NOT_IN:
-				query = query.Where("? NOT IN (?)", bun.Ident(filter.Field), bun.In(filter.Value))
+				query = query.Where("?TableAlias.? NOT IN (?)", bun.Ident(filter.Field), bun.In(filter.Value))
 
 			case FilterOp_GT:
-				query = query.Where("? > ?", bun.Ident(filter.Field), filter.Value)
+				query = query.Where("?TableAlias.? > ?", bun.Ident(filter.Field), filter.Value)
 
 			case FilterOp_GTE:
-				query = query.Where("? >= ?", bun.Ident(filter.Field), filter.Value)
+				query = query.Where("?TableAlias.? >= ?", bun.Ident(filter.Field), filter.Value)
 
 			case FilterOp_LT:
-				query = query.Where("? < ?", bun.Ident(filter.Field), filter.Value)
+				query = query.Where("?TableAlias.? < ?", bun.Ident(filter.Field), filter.Value)
 
 			case FilterOp_LTE:
-				query = query.Where("? <= ?", bun.Ident(filter.Field), filter.Value)
+				query = query.Where("?TableAlias.? <= ?", bun.Ident(filter.Field), filter.Value)
 
 			default:
-				query = query.Where("? = ?", bun.Ident(filter.Field), filter.Value)
+				query = query.Where("?TableAlias.? = ?", bun.Ident(filter.Field), filter.Value)
 			}
 		}
 	}

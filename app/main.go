@@ -74,6 +74,22 @@ func main() {
 		cRtr.Delete("/clients/{client_id}", controllers.DeleteClientHandler)
 	})
 
+	// --- FOSTER ---
+	// Routes that need authentication
+	router.Group(func(fRtr chi.Router) {
+		fRtr.Use(middlewares.AuthMiddleware)
+		// Create a Foster
+		fRtr.Post("/foster", controllers.CreateFosterHandler)
+		// Get a Foster
+		fRtr.Get("/foster/{foster_id}", controllers.GetFosterByIdHandler)
+		// Get all Fosters (+ Query)
+		fRtr.Get("/foster", controllers.GetAllFostersHandler)
+		// Patch a Foster
+		fRtr.Patch("/foster/{foster_id}", controllers.UpdateFosterHandler)
+		// Delete a Foster
+		fRtr.Delete("/foster/{foster_id}", controllers.DeleteFosterHandler)
+	})
+
 	fmt.Println("[server] API Server Running on Port", utils.SERVER_PORT)
 	serverAddr := fmt.Sprintf("0.0.0.0:%d", utils.SERVER_PORT)
 	http.ListenAndServe(serverAddr, router)

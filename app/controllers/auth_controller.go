@@ -5,6 +5,7 @@ import (
 	"app/services"
 	"app/types"
 	"app/utils"
+	"app/utils/access_utils"
 	"app/utils/middlewares"
 	"app/utils/query_utils"
 	"fmt"
@@ -103,10 +104,7 @@ func GetAllUsersHandler(respWr http.ResponseWriter, req *http.Request) {
 		utils.SendErrorResponse(respWr, 400, "Get Failed")
 		return
 	}
-	fmt.Println("[controller] Current User is:", currentUser.Role)
-	if currentUser.Role != models.UserRole_Admin {
-		fmt.Println("[controller] Unauthorized request on Other Users")
-		utils.SendErrorResponse(respWr, 401, "Unauthorized")
+	if !access_utils.IsCrtUserAdmin(currentUser, respWr) {
 		return
 	}
 
@@ -161,6 +159,16 @@ func UpdateUserHandler(respWr http.ResponseWriter, req *http.Request) {
 		fmt.Println("[controller]", err.Error())
 		utils.SendErrorResponse(respWr, 400, "Update Failed")
 		return
+	}
+
+	// Do not permit current User to change its role
+	if currentUser.Id == idAsInt {
+		val, ok := updateInput["role"]
+		fmt.Println("[controller] Not permitted to change Role to", val)
+		if ok {
+			utils.SendErrorResponse(respWr, 401, "Unauthorized")
+			return
+		}
 	}
 
 	updateResult, updateError := services.UpdateUser(idAsInt, updateInput)

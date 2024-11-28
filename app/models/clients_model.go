@@ -15,4 +15,4 @@ type Client struct {
 	SearchVector string    `bun:"search_vector,notnull,scanonly"`
 }
 
-func (pet Client) IsModel() {}
+func (client Client) IsModel() {}

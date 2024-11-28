@@ -20,8 +20,8 @@ type basePet struct {
 
 // Pet DTO
 type PetDTO struct {
-	basePet
 	Id int `json:"id"`
+	basePet
 }
 
 // Create Pet Input DTO

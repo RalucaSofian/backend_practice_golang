@@ -19,6 +19,8 @@ const (
 	ErrorType_PetDoesNotExist ErrorType = "PetDoesNotExist"
 
 	ErrorType_ClientDoesNotExist ErrorType = "ClientDoesNotExist"
+
+	ErrorType_FosterDoesNotExist ErrorType = "FosterDoesNotExist"
 )
 
 type ApiError struct {

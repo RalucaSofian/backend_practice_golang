@@ -5,6 +5,7 @@ import (
 	"app/services"
 	"app/types"
 	"app/utils"
+	"app/utils/access_utils"
 	"app/utils/middlewares"
 	"app/utils/query_utils"
 	"fmt"
@@ -22,10 +23,7 @@ func CreateClientHandler(respWr http.ResponseWriter, req *http.Request) {
 		utils.SendErrorResponse(respWr, 400, "Create Failed")
 		return
 	}
-	fmt.Println("[controller] Current User is:", currentUser.Role)
-	if currentUser.Role != models.UserRole_Admin {
-		fmt.Println("[controller] Unauthorized request")
-		utils.SendErrorResponse(respWr, 401, "Unauthorized")
+	if !access_utils.IsCrtUserAdmin(currentUser, respWr) {
 		return
 	}
 
@@ -53,10 +51,7 @@ func GetClientByIdHandler(respWr http.ResponseWriter, req *http.Request) {
 		utils.SendErrorResponse(respWr, 400, "Get Failed")
 		return
 	}
-	fmt.Println("[controller] Current User is:", currentUser.Role)
-	if currentUser.Role != models.UserRole_Admin {
-		fmt.Println("[controller] Unauthorized request")
-		utils.SendErrorResponse(respWr, 401, "Unauthorized")
+	if !access_utils.IsCrtUserAdmin(currentUser, respWr) {
 		return
 	}
 
@@ -88,10 +83,7 @@ func GetAllClientsHandler(respWr http.ResponseWriter, req *http.Request) {
 		utils.SendErrorResponse(respWr, 400, "Get Failed")
 		return
 	}
-	fmt.Println("[controller] Current User is:", currentUser.Role)
-	if currentUser.Role != models.UserRole_Admin {
-		fmt.Println("[controller] Unauthorized request")
-		utils.SendErrorResponse(respWr, 401, "Unauthorized")
+	if !access_utils.IsCrtUserAdmin(currentUser, respWr) {
 		return
 	}
 
@@ -123,10 +115,7 @@ func UpdateClientHandler(respWr http.ResponseWriter, req *http.Request) {
 		utils.SendErrorResponse(respWr, 400, "Update Failed")
 		return
 	}
-	fmt.Println("[controller] Current User is:", currentUser.Role)
-	if currentUser.Role != models.UserRole_Admin {
-		fmt.Println("[controller] Unauthorized request")
-		utils.SendErrorResponse(respWr, 401, "Unauthorized")
+	if !access_utils.IsCrtUserAdmin(currentUser, respWr) {
 		return
 	}
 
@@ -166,10 +155,7 @@ func DeleteClientHandler(respWr http.ResponseWriter, req *http.Request) {
 		utils.SendErrorResponse(respWr, 400, "Delete Failed")
 		return
 	}
-	fmt.Println("[controller] Current User is:", currentUser.Role)
-	if currentUser.Role != models.UserRole_Admin {
-		fmt.Println("[controller] Unauthorized request")
-		utils.SendErrorResponse(respWr, 401, "Unauthorized")
+	if !access_utils.IsCrtUserAdmin(currentUser, respWr) {
 		return
 	}
 
